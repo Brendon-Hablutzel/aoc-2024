@@ -11,12 +11,8 @@ while True:
     l1.append(num1)
     l2.append(num2)
 
-l1.sort()
-l2.sort()
+lists = zip(sorted(l1), sorted(l2))
 
-sums = 0
-for i in range(len(l1)):
-    difference = abs(l1[i] - l2[i])
-    sums += difference
+sums = sum(abs(a - b) for (a, b) in lists)
 
 print(sums)

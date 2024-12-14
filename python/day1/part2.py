@@ -1,5 +1,7 @@
+from collections import defaultdict
+
 l1 = []
-l2 = []
+l2_freq = defaultdict(int)
 
 while True:
     try:
@@ -9,16 +11,8 @@ while True:
 
     [num1, num2] = [int(n) for n in line.split()]
     l1.append(num1)
-    l2.append(num2)
+    l2_freq[num2] += 1
 
-l1.sort()
-l2.sort()
-
-similarity = 0
-
-for element in l1:
-    freq = l2.count(element)
-    score = element * freq
-    similarity += score
+similarity = sum(element * l2_freq[element] for element in l1)
 
 print(similarity)
