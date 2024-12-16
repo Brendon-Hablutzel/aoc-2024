@@ -3,11 +3,7 @@ import scala.io.Source
 val lines =
   Source.stdin
     .getLines()
-    .map((line: String) =>
-      line.split(" ").map((v: String) => v.toIntOption).collect {
-        case Some(i) => i
-      }
-    )
+    .map((line: String) => line.split(" ").map((v: String) => v.toInt))
 
 def isSafe(levels: Array[Int]): Boolean =
   def isSafeHelper(levels_subarr: Array[Int], inc: Boolean): Boolean =
