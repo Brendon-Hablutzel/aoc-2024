@@ -1,7 +1,7 @@
 import scala.io.Source
 
 val puzzle =
-  Source.stdin.getLines().map((line: String) => line.split("")).toArray
+  Source.stdin.getLines().map((line: String) => line.chars().toArray).toArray
 
 val matchers = List(
   ((0, -1), (0, -2), (0, -3)), // left
@@ -14,7 +14,7 @@ val matchers = List(
   ((1, 1), (2, 2), (3, 3)) // down right diagonal
 )
 
-def getCharOpt(pos: (Int, Int)): Option[String] =
+def getCharOpt(pos: (Int, Int)): Option[Int] =
   val row = pos._1
   val col = pos._2
   puzzle.lift(row).map(_.lift(col)).flatten
@@ -31,8 +31,8 @@ def isXmas(
   val third = getCharOpt(applyDiff(startPos, matcher._2))
   val fourth = getCharOpt(applyDiff(startPos, matcher._3))
 
-  first.contains("X") && second.contains("M") && third.contains("A") && fourth
-    .contains("S")
+  first.contains('X') && second.contains('M') && third.contains('A') && fourth
+    .contains('S')
 
 val found = (0 to puzzle.length)
   .map((row: Int) => (0 to puzzle(0).length).map((col: Int) => (row, col)))
