@@ -31,18 +31,6 @@ while True:
 summed = 0
 
 
-def check_is_valid(update):
-    is_valid = True
-    to_be_updated = set(update)
-    for page in update:
-        depends_on = dependencies[page] if page in dependencies else set()
-        if len(to_be_updated.intersection(depends_on)) != 0:
-            is_valid = False
-
-        to_be_updated.remove(page)
-    return is_valid
-
-
 def check_has_dependencies_after(update, page_idx):
     page = update[page_idx]
     if page not in dependencies:
@@ -78,9 +66,6 @@ for update in updates:
                     page = update.pop(i)
                     update.insert(i + 1, page)
                     checks = True
-
-        if not check_is_valid(update):
-            print(original, update)
 
         middle_val = get_middle_val(update)
         summed += middle_val
