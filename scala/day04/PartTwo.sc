@@ -6,11 +6,15 @@ extension (p: Position)
   def +(other: (Int, Int)) =
     Position(p.row + other._1, p.col + other._2)
 
-  def getInGrid[A](grid: Array[Array[A]]): Option[A] =
+  def getInGrid[A](grid: IndexedSeq[IndexedSeq[A]]): Option[A] =
     grid.lift(p.row).map(_.lift(p.col)).flatten
 
 val puzzle =
-  Source.stdin.getLines().map((line: String) => line.chars().toArray).toArray
+  Source.stdin
+    .getLines()
+    .map((line: String) => line.chars().toArray.toIndexedSeq)
+    .toArray
+    .toIndexedSeq
 
 def isXmas(
     startPos: Position
