@@ -1,7 +1,13 @@
 import scala.io.Source
 
-val puzzle =
-  Source.stdin.getLines().map((line: String) => line.chars().toArray).toArray
+case class Position(val row: Int, val col: Int)
+
+extension (p: Position)
+  def +(other: (Int, Int)) =
+    Position(p.row + other._1, p.col + other._2)
+
+  def getInGrid[A](grid: Array[Array[A]]): Option[A] =
+    grid.lift(p.row).map(_.lift(p.col)).flatten
 
 val matchers = List(
   ((0, -1), (0, -2), (0, -3)), // left
@@ -14,34 +20,26 @@ val matchers = List(
   ((1, 1), (2, 2), (3, 3)) // down right diagonal
 )
 
-def getCharOpt(pos: (Int, Int)): Option[Int] =
-  val row = pos._1
-  val col = pos._2
-  puzzle.lift(row).map(_.lift(col)).flatten
-
-def applyDiff(pow: (Int, Int), diff: (Int, Int)): (Int, Int) =
-  (pow._1 + diff._1, pow._2 + diff._2)
+val puzzle =
+  Source.stdin.getLines().map((line: String) => line.chars().toArray).toArray
 
 def isXmas(
-    startPos: (Int, Int),
+    startPos: Position,
     matcher: ((Int, Int), (Int, Int), (Int, Int))
 ): Boolean =
-  val first = getCharOpt(startPos)
-  val second = getCharOpt(applyDiff(startPos, matcher._1))
-  val third = getCharOpt(applyDiff(startPos, matcher._2))
-  val fourth = getCharOpt(applyDiff(startPos, matcher._3))
+  val first = startPos.getInGrid(puzzle)
+  val second = (startPos + matcher._1).getInGrid(puzzle)
+  val third = (startPos + matcher._2).getInGrid(puzzle)
+  val fourth = (startPos + matcher._3).getInGrid(puzzle)
 
   first.contains('X') && second.contains('M') && third.contains('A') && fourth
     .contains('S')
 
-val found = (0 to puzzle.length)
-  .map((row: Int) => (0 to puzzle(0).length).map((col: Int) => (row, col)))
-  .flatten
-  .map((pos: (Int, Int)) =>
-    matchers
-      .map((matcher) => isXmas((pos._1, pos._2), matcher))
-      .count(identity)
-  )
+val positions = for i <- 0 to puzzle.length; j <- 0 to puzzle(0).length
+yield Position(i, j)
+
+val found = positions
+  .map(pos => matchers.map(matcher => isXmas(pos, matcher)).count(identity))
   .sum
 
 println(found)
