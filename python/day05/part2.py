@@ -56,8 +56,6 @@ for update in updates:
         to_be_updated.remove(page)
 
     if not is_valid:
-        original = update.copy()
-
         checks = True
         while checks:
             checks = False
