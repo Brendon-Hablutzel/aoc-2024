@@ -15,16 +15,18 @@ def isSafe(levels: Array[Int]): Boolean =
       then false
       else isSafeHelper(levelsSubarr.drop(1), inc)
 
-  isSafeHelper(levels, levels(1) - levels(0) > 0)
+  if (levels(1) - levels(0) == 0) then false
+  else isSafeHelper(levels, levels(1) - levels(0) > 0)
 
 val numSafe = lines
-  .map((report: Array[Int]) =>
-    var safe = false
-    for i <- 0 until report.length do
-      val modified_report = report.take(i) ++ report.drop(i + 1)
-      if isSafe(modified_report) then safe = true
-    safe
+  .map(report =>
+    (0 until report.length)
+      .map(i =>
+        val modifiedReport = report.take(i) ++ report.drop(i + 1)
+        isSafe(modifiedReport)
+      )
+      .exists(identity)
   )
-  .count((a: Boolean) => a)
+  .count(identity)
 
 println(numSafe)

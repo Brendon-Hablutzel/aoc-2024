@@ -6,17 +6,18 @@ val lines =
     .map((line: String) => line.split(" ").map((v: String) => v.toInt))
 
 def isSafe(levels: Array[Int]): Boolean =
-  def isSafeHelper(levels_subarr: Array[Int], inc: Boolean): Boolean =
-    if levels_subarr.length == 1 then true
+  def isSafeHelper(levelsSubarr: Array[Int], inc: Boolean): Boolean =
+    if levelsSubarr.length == 1 then true
     else
-      val diff = levels_subarr(1) - levels_subarr(0)
+      val diff = levelsSubarr(1) - levelsSubarr(0)
 
       if (diff < 0 && inc) || (diff > 0 && !inc) || (diff.abs > 3) || (diff.abs == 0)
       then false
-      else isSafeHelper(levels_subarr.drop(1), inc)
+      else isSafeHelper(levelsSubarr.drop(1), inc)
 
-  isSafeHelper(levels, levels(1) - levels(0) > 0)
+  if (levels(1) - levels(0) == 0) then false
+  else isSafeHelper(levels, levels(1) - levels(0) > 0)
 
-val numSafe = lines.map(isSafe).count((a: Boolean) => a)
+val numSafe = lines.map(isSafe).count(identity)
 
 println(numSafe)
