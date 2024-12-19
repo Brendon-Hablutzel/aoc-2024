@@ -4,23 +4,6 @@ import scala.io.Source
 
 case class Cell(val row: Int, val col: Int, val value: Char)
 
-val map =
-  Source.stdin
-    .getLines()
-    .zipWithIndex
-    .map((line: String, rowIdx: Int) =>
-      line
-        .chars()
-        .toArray
-        .zipWithIndex
-        .map((char: Int, colIdx: Int) => Cell(rowIdx, colIdx, char.toChar))
-        .toVector
-    )
-    .toVector
-
-val mapRows = map.length
-val mapCols = map(0).length
-
 val guardCases = HashMap(
   // guard position -> (rotated right position, row change, col change)
   '^' -> ('>', -1, 0),
@@ -40,8 +23,8 @@ def turn(
   val newRow = guardCell.row + rowChange
   val newCol = guardCell.col + colChange
 
-  if newRow < 0 || newRow >= mapRows || newCol < 0 || newCol >= mapCols then
-    None
+  if newRow < 0 || newRow >= map.length || newCol < 0 || newCol >= map(0).length
+  then None
   else
     val newCell = map(newRow)(newCol)
 
@@ -66,6 +49,20 @@ def simulate(map: Vector[Vector[Cell]]): HashSet[(Int, Int)] =
       case None => newVisited
 
   helper(map.flatten.find(_.value == '^').get, HashSet())
+
+val map =
+  Source.stdin
+    .getLines()
+    .zipWithIndex
+    .map((line: String, rowIdx: Int) =>
+      line
+        .chars()
+        .toArray
+        .zipWithIndex
+        .map((char: Int, colIdx: Int) => Cell(rowIdx, colIdx, char.toChar))
+        .toVector
+    )
+    .toVector
 
 val visited = simulate(map)
 
