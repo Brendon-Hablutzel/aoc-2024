@@ -125,7 +125,6 @@ for row_idx in range(len(original_m)):
         if cell == "^":
             current_guard_pos = (row_idx, col_idx)
 
-print(current_guard_pos)
 
 loops = 0
 for row_idx in range(len(original_m)):
@@ -135,7 +134,6 @@ for row_idx in range(len(original_m)):
             new = copy.deepcopy(original_m)
             new[row_idx][col_idx] = "#"
             if check_loop(new):
-                print("loop at", row_idx, col_idx)
                 loops += 1
 
 print(loops)
