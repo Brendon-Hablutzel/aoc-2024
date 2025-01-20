@@ -3,3 +3,5 @@
 .vscode
 .bsp
 *.txt
+project
+target
